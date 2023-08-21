@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Advertisement
+from django.utils import timezone
 # Create your views here.
 
 
@@ -21,7 +22,8 @@ def debug(request):
     #     )
     #     adv1.save()
     objectlist = Advertisement.objects.all()
-    print([o for o in objectlist])
+    print([o.updated_at.strftime("%d.%m.%Y") for o in objectlist])
+    print(timezone.now().date().strftime("%d.%m.%Y"))
 
     return HttpResponse("Сохр")
 
