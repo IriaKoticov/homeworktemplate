@@ -7,23 +7,16 @@ from django.utils import timezone
 
 
 def index(request):
-    return render(request,"index.html")
+    advlist = Advertisement.objects.all()
+    context = {"advertisment" : advlist }
+    return render(request,"index.html",context = context)
 
 def top_sellers(request):
     return render(request,"top-sellers.html")
 
 def debug(request):
-    #отладочная функция
-    # for i in range(101):
-    #     adv1 = Advertisement(
-    #         title = f"тест{i}",
-    #         text = f"текст{i}",
-    #         author = "admin"
-    #     )
-    #     adv1.save()
+
     objectlist = Advertisement.objects.all()
-    print([o.updated_at.strftime("%d.%m.%Y") for o in objectlist])
-    print(timezone.now().date().strftime("%d.%m.%Y"))
 
     return HttpResponse("Сохр")
 

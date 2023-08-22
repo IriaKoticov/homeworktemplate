@@ -3,12 +3,12 @@ from .models import Advertisement
 
 
 class AdvAdmin(admin.ModelAdmin):
-    list_display =['id','title','date','auction',"hende_date","updatetime"]
+    list_display =['id','title','author','date','auction',"hende_date","updatetime","imgpre"]
     list_filter =["title","date"]
     actions=["deldescr","mkaucttrue"]
 
     fieldsets = (
-                ("Общее",{"fields":("title","text")}),
+                ("Общее",{"fields":("title","text","author","coortun")}),
                 ("финансы",{"fields":("auction","prise"),"classes":["collapse"]})
                 )
 
