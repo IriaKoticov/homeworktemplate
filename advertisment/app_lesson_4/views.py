@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Advertisement
-from django.utils import timezone
+# from .forms import Advforms
 # Create your views here.
-
+from .models import Advmodelform
 
 
 def index(request):
@@ -21,7 +21,18 @@ def debug(request):
     return HttpResponse("Сохр")
 
 def post_ads(request):
-    return render(request,"advertisement-post.html")
+
+    if request.method == "POST":
+        form = Advmodelform(request.POST,request.FILES)
+        if form.is_valid():
+            adv_obj = Advertisement(**form.cleaned_data)
+            adv_obj.author = request.user
+            adv_obj.save()
+            
+    form = Advmodelform()
+    context = {'form': form}
+
+    return render(request,"advertisement-post.html",context=context)
 
 def registr(request):
     return render(request,"register.html")

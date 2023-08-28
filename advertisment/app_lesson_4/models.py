@@ -2,13 +2,22 @@ from django.db import models
 from django.contrib import admin
 from django.utils import timezone,html
 from django.contrib.auth import get_user_model
+import django.forms as fm
+from django.forms import ModelForm
 # Create your models here.
+
+
+    
+def examination(value):
+    if value[0] == "?":
+        raise ValueError("Заголовок не может начинаться с вопросительного знака и форма не проходила валидацию.")
+
 
 User = get_user_model()
 
 class Advertisement(models.Model): #это класс модель
     id = models.AutoField(primary_key=True)
-    title = models.CharField("заголовок",max_length=64)
+    title = models.CharField("заголовок",max_length=64,validators=[examination])
     text = models.TextField("описание")
     author = models.ForeignKey(to=User,on_delete=models.CASCADE)
     date = models.DateField("дата", auto_now_add=True)
@@ -16,8 +25,6 @@ class Advertisement(models.Model): #это класс модель
     prise = models.FloatField("цена")
     auction = models.BooleanField("торг",default=False)
     coortun = models.ImageField("изображения",upload_to="media",default="static/img/adv.png")
-    
-    
 
 
     @admin.display(description="Когда создано")
@@ -47,4 +54,14 @@ class Advertisement(models.Model): #это класс модель
         verbose_name = 'advertisements'
         verbose_name_plural = 'advertisements'
 
-    
+
+class Advmodelform(ModelForm):
+    class Meta:
+        model = Advertisement
+        fields = ['title','text','prise','auction','coortun']
+        widgets = {
+                    'title': fm.TextInput(attrs={"class":"form-control form-control-lg"}),
+                    'text':fm.Textarea(attrs={"class":"form-control form-control-lg"}),
+                    'prise':fm.NumberInput(attrs={"class":"form-control form-control-lg"}),
+                    'auction':fm.CheckboxInput(attrs={"class":"form-check-input"})
+                    }
